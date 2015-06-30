@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <parent>
+        <groupId>ejb21-jboss422-snippets</groupId>
+        <artifactId>ejb21-jboss422-snippets</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ejb21-jboss422-snippets-web</artifactId>
+    <packaging>war</packaging>
+    <name>ejb21-jboss422-snippets-web</name>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    
+    <build>   
+        <plugins>   
+        
+            <!-- compile -->                  
+            <plugin>                                   
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.4</source> 
+                    <target>1.4</target>
+                </configuration>                         
+            </plugin>      
+        </plugins>    
+    </build>     
+    
+    
+     <dependencies>
+        <!-- 
+            javax             
+            http://en.wikipedia.org/wiki/Java_EE_version_history
+        -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+                       
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ejb21-jboss422-snippets</groupId>
+            <artifactId>ejb21-jboss422-snippets-ejb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>ejb</type>
+            <!-- 
+                Reason:
+                1. very important to add this, otherwise it will hit ClassCastException at PortableRemoteObject.narrow(ref, HelloWorldLocalHome.class);
+                2. Unselecting packaging of EJB library in the web module's properties helped.
+                
+                Reference:
+                1. https://community.jboss.org/wiki/ClassCastExceptions
+                2. http://netbeans-org.1045718.n5.nabble.com/ClassCastException-calling-javax-rmi-PortableRemoteObject-narrow-td2958686.html 
+            
+            -->
+            <scope>provided</scope>
+        </dependency>
+        
+    </dependencies>       
+</project>

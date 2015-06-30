@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+        "-//JBoss//DTD JBOSS 4.2//EN"
+        "http://www.jboss.org/j2ee/dtd/jboss_4_2.dtd">
+        
+<!-- 
+    without jboss.xml for mapping local bean, it will add a postfix of a random number, e.g
+    11:30:32,298 INFO  [BaseLocalProxyFactory] Bound EJB LocalHome 'HelloWorldStatefulLocal' to jndi 'local/HelloWorldStatefulLocal@123456'
+    
+    Reference:
+    https://community.jboss.org/wiki/WhyDoesTheLocalNameContainARandomNumber
+ -->        
+        
+<jboss>
+    <enterprise-beans>
+        <session>
+            <ejb-name>HelloWorldStatefulLocal</ejb-name>
+            <local-jndi-name>HelloWorldStatefulLocal</local-jndi-name>
+        </session>
+    </enterprise-beans>
+</jboss>

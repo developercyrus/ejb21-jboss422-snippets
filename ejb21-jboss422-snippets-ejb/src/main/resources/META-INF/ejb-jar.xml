@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+    version="2.1">
+
+
+    <enterprise-beans>
+        <session>
+            <ejb-name>HelloWorldStatelessRemote</ejb-name>
+            <home>session.bean.stateless.HelloWorldHome</home>
+            <remote>session.bean.stateless.HelloWorldObject</remote>
+            <ejb-class>session.bean.stateless.HelloWorldImpl</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+        
+        <session>
+            <ejb-name>HelloWorldStatefulLocal</ejb-name>
+            <local-home>session.bean.stateful.HelloWorldLocalHome</local-home>
+            <local>session.bean.stateful.HelloWorldLocalObject</local>
+            <ejb-class>session.bean.stateful.HelloWorldImpl</ejb-class>
+            <session-type>Stateful</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+
+</ejb-jar>
