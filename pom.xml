@@ -2,6 +2,38 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <!-- 
+    
+        EJB:
+        1. in this project, message-driven bean is used to serve as JMS message consumer.
+        2. while the message is consumed by MDB, its success is verified if it can be inserted in database or not.
+        3. in this project, BMP is used for entity bean
+        4. for BMP, two methods (EntityBean) are required to code by developers. Both returns primary key
+                ejbCreate
+                findByPrimaryKey 
+           reference: 
+                http://www.conceptgo.com/gsejb/eb01.html
+                http://docs.oracle.com/cd/E16439_01/doc.1013/e13981/ent21imp002.htm
+                http://j2eetutorials.50webs.com/ejb_example4.html
+        5. the configure of mysql datasource is similar to https://github.com/developercyrus/jndi-jboss422-snippets     
+                 
+
+        Flow
+        1. initialize database (drop database, create database, create table)
+        2. copy mysql-ds.xml to jboss server
+        3. copy mysql driver to jboss server
+        4. compile ejb to jar, servlet to war, and both to ear
+        5. start jboss
+        6. wait for jboss to launch completely for 10 seconds
+        7. deploy ear to jboss
+        8. jms client producers 10 message to jbossmq of a queue "consumingQueue"
+        9. run integration test:
+                -MDB consumes message from the queue
+                -for each, message, BMP saves the text into database
+                -web client call servlet, in turn local call to stateful session bean
+                -console client remote call to stateless session bean
+        10. stop the jboss         
+        
+
         Multi module project creation by elipse
         1. Create a parent project by File > New > Other > Maven > Maven Project
         2. Click "Create a simple project (skip archetype selection)"
@@ -24,6 +56,13 @@
         3.  JDK 8.0        
         4.  Jboss 4.2 (embedded as project, located in ${basedir}\server\jboss-4.2.2.GA, downloaded from http://jbossas.jboss.org/downloads/)
        
+              
+        JBoss MQ:
+        1 .JBoss AS 4 ships with JBossMQ as default JMS provider, reference: http://docs.jboss.org/jbossmessaging/docs/userguide-1.4.1.Beta1/html/installation.html
+        2. JBoss Messaging supersedes JBoss MQ as the default JMS provider in JBoss AS 5.
+        3. The example use of message driven bean in this project is based on https://docs.jboss.org/jbossas/docs/Server_Configuration_Guide/4/html/JMS_Examples-A_Point_To_Point_With_MDB_Example.html
+              
+        
         Jboss is embedded in this project, eclipse will validate all file inside. It will throws error for 
             dtd: \ejb-jboss422-snippets-ear\server\jboss-4.2.2.GA\dtd
             xml: \ejb-jboss422-snippets-ear\server\jboss-4.2.2.GA\examples\jmx\logging-monitor-deploy\
@@ -59,7 +98,12 @@
         
         
         Remark:
-        This is re-development of j2ee14-jboss422-snippets. Most of codes are the same, but configuration of maven is more clearer
+        This is re-development + MDB + BMP of j2ee14-jboss422-snippets. Most of codes are the same, but configuration of maven is more clearer
+        
+        
+        refenence:
+        https://developer.jboss.org/wiki/JBossMQ
+        
      -->
     
     <modelVersion>4.0.0</modelVersion>

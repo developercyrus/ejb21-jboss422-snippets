@@ -17,5 +17,14 @@
             <ejb-name>HelloWorldStatefulLocal</ejb-name>
             <local-jndi-name>HelloWorldStatefulLocal</local-jndi-name>
         </session>
+        
+        <message-driven>
+            <ejb-name>HelloWorldConsumer</ejb-name>
+            <destination-jndi-name>queue/consumingQueue</destination-jndi-name>
+            <resource-ref>
+                <res-ref-name>jms/QCF</res-ref-name>
+                <jndi-name>ConnectionFactory</jndi-name>
+            </resource-ref>
+        </message-driven>       
     </enterprise-beans>
 </jboss>

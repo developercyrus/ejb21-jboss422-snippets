@@ -1,28 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
-    version="2.1">
-
+<ejb-jar 
+     xmlns="http://java.sun.com/xml/ns/j2ee"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                         http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+     version="2.1">
 
     <enterprise-beans>
         <session>
             <ejb-name>HelloWorldStatelessRemote</ejb-name>
-            <home>session.bean.stateless.HelloWorldHome</home>
-            <remote>session.bean.stateless.HelloWorldObject</remote>
-            <ejb-class>session.bean.stateless.HelloWorldImpl</ejb-class>
+            <home>stateless.session.bean.HelloWorldHome</home>
+            <remote>stateless.session.bean.HelloWorldObject</remote>
+            <ejb-class>stateless.session.bean.HelloWorldImpl</ejb-class>
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>
         
         <session>
             <ejb-name>HelloWorldStatefulLocal</ejb-name>
-            <local-home>session.bean.stateful.HelloWorldLocalHome</local-home>
-            <local>session.bean.stateful.HelloWorldLocalObject</local>
-            <ejb-class>session.bean.stateful.HelloWorldImpl</ejb-class>
+            <local-home>stateful.session.bean.HelloWorldLocalHome</local-home>
+            <local>stateful.session.bean.HelloWorldLocalObject</local>
+            <ejb-class>stateful.session.bean.HelloWorldImpl</ejb-class>
             <session-type>Stateful</session-type>
             <transaction-type>Container</transaction-type>
         </session>
+        
+        <!-- 
+            <message-driven-destination> is not supported in EJB 2.1 or above.>
+         -->
+        <message-driven>
+            <ejb-name>HelloWorldConsumer</ejb-name>
+            <ejb-class>message.driven.bean.HelloWorldImpl</ejb-class>
+            <messaging-type>javax.jms.MessageListener</messaging-type>
+            <transaction-type>Container</transaction-type>            
+            <activation-config>
+                <activation-config-property>
+                    <activation-config-property-name>destinationType</activation-config-property-name>
+                    <activation-config-property-value>javax.jms.Queue</activation-config-property-value>
+                </activation-config-property> 
+                <activation-config-property>
+                    <activation-config-property-name>acknowledgeMode</activation-config-property-name>
+                    <activation-config-property-value>Auto-acknowledge</activation-config-property-value>
+                </activation-config-property>               
+            </activation-config>
+            <resource-ref>
+                <res-ref-name>jms/QCF</res-ref-name>
+                <res-type>javax.jms.ConnectionFactory</res-type>
+                <res-auth>Container</res-auth>
+            </resource-ref>                    
+        </message-driven>
+        
+        <entity>
+            <ejb-name>HelloWorldBMP</ejb-name>
+            <home>bean.managed.persistence.entity.bean.HelloWorldHome</home>
+            <remote>bean.managed.persistence.entity.bean.HelloWorldObject</remote>
+            <ejb-class>bean.managed.persistence.entity.bean.HelloWorldImpl</ejb-class>
+            <persistence-type>Bean</persistence-type>
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <!-- 
+                1. If it is true, multiple clients can connect to the Entity bean and execute methods within the entity bean concurrently. And J2ee Container takes care of synchronization.
+                2. If it is false, and many clients tries to connect to Entity Bean concurrently to execute a method, exception is thrown.
+            
+                reference: http://www.java-tips.org/java-ee-tips-100042/17-enterprise-java-beans/2066-what-is-the-use-of-reentrant-in-entity-beans.html
+             -->
+            <reentrant>false</reentrant>
+            <resource-ref>
+                <res-ref-name>jdbc/mysql</res-ref-name>
+                <res-type>javax.sql.DataSource</res-type>
+                <res-auth>Application</res-auth>
+            </resource-ref>
+        </entity>
     </enterprise-beans>
 
 </ejb-jar>

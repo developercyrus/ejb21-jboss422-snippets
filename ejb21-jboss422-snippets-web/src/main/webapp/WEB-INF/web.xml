@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
    
     <servlet>
-        <servlet-name>HelloWorldLocalClientServlet</servlet-name>
-        <servlet-class>session.bean.stateful.client.web.HelloWorldLocalClientServlet</servlet-class>
+        <servlet-name>HelloWorldStatefulLocalCallServlet</servlet-name>
+        <servlet-class>stateful.session.bean.local.client.servlet.HelloWorldStatefulLocalCallServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HelloWorldLocalClientServlet</servlet-name>
-        <url-pattern>/HelloWorldLocalClientServlet</url-pattern>
+        <servlet-name>HelloWorldStatefulLocalCallServlet</servlet-name>
+        <url-pattern>/HelloWorldStatefulLocalCallServlet</url-pattern>
     </servlet-mapping>
 </web-app>      

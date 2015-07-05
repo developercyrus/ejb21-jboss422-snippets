@@ -37,8 +37,6 @@
             <groupId>jboss</groupId>
             <artifactId>jboss-j2ee</artifactId>
             <version>4.2.2.GA</version>
-        </dependency>    
+        </dependency>  
     </dependencies>
-    
-    
 </project>

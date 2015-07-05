@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+    <local-tx-datasource>
+        <jndi-name>jdbc/mysql</jndi-name>
+        <connection-url>jdbc:mysql://localhost:3306/javaee_ejb21_jboss422</connection-url>
+        <!-- 
+            This tells JBoss to open this datasource for remote access, 
+            and its JNDI name will be used for remote lookup without using java:/ prefix. 
+        -->
+        <use-java-context>false</use-java-context>
+        <driver-class>com.mysql.jdbc.Driver</driver-class>
+        <user-name>root</user-name>
+        <password></password>
+    </local-tx-datasource>
+</datasources>

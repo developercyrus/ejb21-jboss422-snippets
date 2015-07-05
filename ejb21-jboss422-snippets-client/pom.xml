@@ -62,7 +62,43 @@
                                         </execute>                                            
                                     </action>
                                 </pluginExecution>  
-                                                                                                          
+                                                    
+                                                    
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>sql-maven-plugin</artifactId>
+                                        <versionRange>[1.5,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    
+                                    <action>
+                                        <execute>  
+                                            <runOnIncremental>false</runOnIncremental>  
+                                        </execute>  
+                                    </action>
+                                </pluginExecution>
+                                
+                                
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-resources-plugin</artifactId>
+                                        <versionRange>[2.4,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    
+                                    <action>
+                                        <execute>  
+                                            <runOnIncremental>false</runOnIncremental>  
+                                        </execute>  
+                                    </action>
+                                </pluginExecution>
+                                                                                          
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
@@ -71,6 +107,143 @@
         </pluginManagement>
         
         <plugins>           
+        
+        
+            
+            
+            <!-- initialize -->            
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.9</version>
+                    </dependency>
+                </dependencies>
+                
+                <executions>
+                    <execution>
+                        <id>drop-db-before-test-if-any (mysql)</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306</url>
+                            <username>root</username>
+                            <password></password>
+                            <settingsKey>sensibleKey</settingsKey>
+                            <skip>${maven.test.skip}</skip>
+                            <autocommit>true</autocommit>
+                            <sqlCommand>                                                                
+                                drop database if exists javaee_ejb21_jboss422                                                      
+                            </sqlCommand>
+                            <onError>continue</onError>
+                        </configuration>
+                    </execution>
+                    
+
+                    <execution>
+                        <id>create-db (mysql)</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306</url>
+                            <username>root</username>
+                            <password></password>
+                            <settingsKey>sensibleKey</settingsKey>
+                            <skip>${maven.test.skip}</skip>
+                            <autocommit>true</autocommit>
+                            <sqlCommand>                                                                        
+                                create database if not exists javaee_ejb21_jboss422                                                  
+                            </sqlCommand>
+                        </configuration>
+                    </execution>
+                                       
+                                      
+                    <execution>
+                        <id>create-schema (mysql)</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306</url>
+                            <username>root</username>
+                            <password></password>
+                            <settingsKey>sensibleKey</settingsKey>
+                            <skip>${maven.test.skip}</skip>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/javaee/ejb21/jboss422/create-schema.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+            
+            
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>copy-datasource</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/server/jboss-4.2.2.GA/server/default/deploy</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/javaee/ejb21/jboss422/server</directory>
+                                    <includes>
+                                        <include>mysql-ds.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>copy-mysql-driver</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/server/jboss-4.2.2.GA/server/default/lib</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/mysql-driver</directory>
+                                    <includes>
+                                        <include>mysql-connector-java-5.1.9.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+            
+                </executions>
+            </plugin>
+            
+            
+            
+            
+            
             <!-- compile -->                  
             <plugin>                                   
                 <groupId>org.apache.maven.plugins</groupId>
@@ -118,7 +291,7 @@
                         <id>stop jboss</id>
                         <phase>post-integration-test</phase>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>stop</goal>
                         </goals>
                     </execution>
 
@@ -187,6 +360,7 @@
             <type>ejb</type>
         </dependency>
         
+        <!-- ejb client -->
         <dependency>
             <groupId>jboss</groupId>
             <artifactId>jbossall-client</artifactId>
