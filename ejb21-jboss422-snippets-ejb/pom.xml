@@ -8,6 +8,10 @@
     
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ejb21-jboss422-snippets-ejb</artifactId>
+    <!--  
+        Using packaging type ejb includes the execution of the maven-ejb-plugin. 
+        reference: http://stackoverflow.com/a/18866901
+    -->    
     <packaging>ejb</packaging>
     <name>ejb21-jboss422-snippets-ejb</name>
     
@@ -28,7 +32,18 @@
                     <source>1.4</source> 
                     <target>1.4</target>
                 </configuration>                         
-            </plugin>      
+            </plugin>   
+            
+            
+            <!-- if version 2.1, it can be omitted, because by default, it's 2.1 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <ejbVersion>2.1</ejbVersion>
+                </configuration>
+            </plugin>   
         </plugins>    
     </build>     
     
