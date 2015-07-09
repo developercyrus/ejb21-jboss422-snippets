@@ -5,16 +5,17 @@
     
         EJB:
         1. in this project, message-driven bean is used to serve as JMS message consumer.
-        2. while the message is consumed by MDB, its success is verified if it can be inserted in database or not.
-        3. in this project, BMP is used for entity bean
-        4. for BMP, two methods (EntityBean) are required to code by developers. Both returns primary key
+        2  MDB itself is stateless
+        3. while the message is consumed by MDB, its success is verified if it can be inserted in database or not.
+        4. in this project, BMP is used for entity bean
+        5. for BMP, two methods (EntityBean) are required to code by developers. Both returns primary key
                 ejbCreate
                 findByPrimaryKey 
            reference: 
                 http://www.conceptgo.com/gsejb/eb01.html
                 http://docs.oracle.com/cd/E16439_01/doc.1013/e13981/ent21imp002.htm
                 http://j2eetutorials.50webs.com/ejb_example4.html
-        5. the configure of mysql datasource is similar to https://github.com/developercyrus/jndi-jboss422-snippets     
+        6. the configure of mysql datasource is similar to https://github.com/developercyrus/jndi-jboss422-snippets     
                  
 
         Flow
