@@ -45,11 +45,11 @@
         reference: https://www.youtube.com/watch?v=obHce3gvgec        
     
         Project creation sequence:
-        1. ejb-jboss422-snippets
-        2. ejb-jboss422-snippets-ejb
-        3. ejb-jboss422-snippets-web
-        4. ejb-jboss422-snippets-ear
-        5. ejb-jboss422-snippets-client
+        1. ejb21-jboss422-snippets
+        2. ejb21-jboss422-snippets-ejb
+        3. ejb21-jboss422-snippets-web
+        4. ejb21-jboss422-snippets-ear
+        5. ejb21-jboss422-snippets-client
     
         Environment:
         1.  Windows 7 64 bit (assume OS installed in C:\Windows)
