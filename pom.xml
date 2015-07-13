@@ -93,7 +93,7 @@
             g) at ejb21-jboss422-snippets-client, deploy ear to jboss, by jboss-maven-plugin, at pre-integration-test phase 
             h) at ejb21-jboss422-snippets-client, run intergration test, for remote client, at integration-test phase 
             i) at ejb21-jboss422-snippets-client, run intergration test, for local servlet, at integration-test phase  
-            j) at ejb21-jboss422-snippets-client, stop jboss, by jboss-maven-plugin, at post-initialize phase
+            j) at ejb21-jboss422-snippets-client, stop jboss, by jboss-maven-plugin, at post-integration phase
         2. while jboss is still running, the server can be manually accessed without using integration test by going to 
             http://localhost:8080/ejb21-jboss422-snippets-web/HelloWorldLocalClientServlet  
         
