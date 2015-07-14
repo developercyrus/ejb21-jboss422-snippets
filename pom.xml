@@ -24,7 +24,7 @@
         3. copy mysql driver to jboss server
         4. compile ejb to jar, servlet to war, and both to ear
         5. start jboss
-        6. wait for jboss to launch completely for 10 seconds
+        6. #wait for jboss to launch completely for 10 seconds (this is originally done by maven-antrun-plugin, but replaced by jboss-maven-plugin:start-and-wait)
         7. deploy ear to jboss
         8. jms client producers 10 message to jbossmq of a queue "consumingQueue"
         9. run integration test:
@@ -44,6 +44,7 @@
         6. Make sure the Parent Project set as "ejb21-jboss422-snippets"             
         reference: https://www.youtube.com/watch?v=obHce3gvgec        
     
+        
         Project creation sequence:
         1. ejb21-jboss422-snippets
         2. ejb21-jboss422-snippets-ejb
@@ -57,6 +58,13 @@
         3.  JDK 8.0        
         4.  Jboss 4.2 (embedded as project, located in ${basedir}\server\jboss-4.2.2.GA, downloaded from http://jbossas.jboss.org/downloads/)
        
+       
+        Plugin:
+        1.  "mvn jboss:start" will not be used up the command prompt, it will launch a VM separately, and can be used to type another command. 
+        
+        
+        Logging:
+        1.  \ejb-jboss422-snippets-client\server\jboss-4.2.2.GA\server\default\log\server.log
                    
         JBoss MQ:
         1 .JBoss AS 4 ships with JBossMQ as default JMS provider, reference: http://docs.jboss.org/jbossmessaging/docs/userguide-1.4.1.Beta1/html/installation.html
@@ -88,12 +96,13 @@
             b) build ejb21-jboss422-snippets        into jar    
             c) build ejb21-jboss422-snippets-web    into war
             d) build ejb21-jboss422-snippets-ear    into ear with (b) and (c)
-            e) at ejb21-jboss422-snippets-client, start jboss, by jboss-maven-plugin, at initialize phase
-            f) at ejb21-jboss422-snippets-client, sleep 10 seconds to wait for jboss completely launch, by maven-antrun-plugin, at initialize phase
+            e) at ejb21-jboss422-snippets-client, start jboss:start, by jboss-maven-plugin, at initialize phase
+            f) #at ejb21-jboss422-snippets-client, sleep 10 seconds to wait for jboss completely launch, by maven-antrun-plugin, at initialize phase (this is replaced by
+                jboss-maven-plugin:start-and-wait)
             g) at ejb21-jboss422-snippets-client, deploy ear to jboss, by jboss-maven-plugin, at pre-integration-test phase 
             h) at ejb21-jboss422-snippets-client, run intergration test, for remote client, at integration-test phase 
             i) at ejb21-jboss422-snippets-client, run intergration test, for local servlet, at integration-test phase  
-            j) at ejb21-jboss422-snippets-client, stop jboss, by jboss-maven-plugin, at post-integration phase
+            j) at ejb21-jboss422-snippets-client, stop jboss:stop, by jboss-maven-plugin, at post-integration phase
         2. while jboss is still running, the server can be manually accessed without using integration test by going to 
             http://localhost:8080/ejb21-jboss422-snippets-web/HelloWorldLocalClientServlet  
         

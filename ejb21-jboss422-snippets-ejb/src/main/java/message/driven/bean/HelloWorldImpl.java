@@ -1,6 +1,9 @@
 package message.driven.bean;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.rmi.dgc.VMID;
 import java.util.Date;
 
 import javax.ejb.CreateException;
@@ -38,21 +41,44 @@ public class HelloWorldImpl implements MessageDrivenBean, MessageListener {
 
 	public void onMessage(Message message) {
 		TextMessage txtMsg = (TextMessage) message;
-		System.out.println("MDB consumed message: " + message.toString());	
-				
+		String storedText=null;
+		try {
+			String hostname = InetAddress.getLocalHost().getHostName();
+			VMID vmid = new VMID();   
+			
+			/*
+			 	It will NOT display in JUnit console.
+			 	Instead, it can be found in \ejb-jboss422-snippets-client\server\jboss-4.2.2.GA\server\default\log\server.log
+			 */
+			storedText = txtMsg.getText()
+						+ System.getProperty("line.separator") + "at hostname=" + hostname 
+						+ System.getProperty("line.separator") + "at PID=" + getPID()
+						+ System.getProperty("line.separator") + "at VMID=" + vmid.toString();
+			
+			System.out.println(storedText);
+			
+		} catch (UnknownHostException e1) {			
+			e1.printStackTrace();
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+	    	
 		try {
 			Context ctx = new InitialContext();
 			Object ref = ctx.lookup("HelloWorldBMP");
 			HelloWorldHome h = (HelloWorldHome)PortableRemoteObject.narrow(ref, HelloWorldHome.class);
-			HelloWorldObject hw = h.create(txtMsg.getText(), new Date());
+			HelloWorldObject hw = h.create(storedText, new Date());
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (CreateException e) {
 			e.printStackTrace();
-		} catch (JMSException e) {
-			e.printStackTrace();
 		}
+	}
+	
+	public long getPID() {
+		String processName = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+		return Long.parseLong(processName.split("@")[0]);
 	}
 }

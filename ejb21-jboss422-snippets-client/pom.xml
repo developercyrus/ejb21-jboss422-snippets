@@ -34,6 +34,7 @@
                                         <versionRange>[1.5,)</versionRange>
                                         <goals>
                                             <goal>start</goal>
+                                            <goal>start-and-wait</goal>
                                             <goal>deploy</goal>
                                             <goal>stop</goal>
                                         </goals>
@@ -241,9 +242,6 @@
             </plugin>
             
             
-            
-            
-            
             <!-- compile -->                  
             <plugin>                                   
                 <groupId>org.apache.maven.plugins</groupId>
@@ -261,6 +259,20 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jboss-maven-plugin</artifactId>
                 <version>1.5.0</version>
+                
+                <!-- 
+                    when using "start-and-wait", it will hit "Waiting to retrieve JBoss JMX MBean connection..." 
+                    because there's no "ClassNotFoundException org.jboss.jmx.adaptor.rmi.RMIAdaptor"
+                    solved by adding jboss-all-client as dependency
+                 -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jboss.jbossas</groupId>
+                        <artifactId>jboss-as-client</artifactId>
+                        <type>pom</type>
+                        <version>5.1.0.GA</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <jbossHome>${basedir}/server/jboss-4.2.2.GA</jbossHome>
                     <!-- this is equal to jboss/jboss-4.2.2.GA/server/default -->
@@ -275,7 +287,7 @@
                         <id>start jboss</id>
                         <phase>initialize</phase>
                         <goals>
-                            <goal>start</goal>
+                            <goal>start-and-wait</goal>
                         </goals>
                     </execution>
                     
@@ -286,7 +298,6 @@
                             <goal>deploy</goal>
                         </goals>
                     </execution>
-                    
                     <execution>
                         <id>stop jboss</id>
                         <phase>post-integration-test</phase>
@@ -294,10 +305,16 @@
                             <goal>stop</goal>
                         </goals>
                     </execution>
-
                 </executions>
             </plugin>  
             
+            
+            
+            <!-- 
+                It uses with jboss-maven-plugin:start, to wait for 10 seconds to let server completely launch up.
+                But it's replaced by jboss-maven-plugin:start-and-wait. So it's no longer needed.            
+             -->
+            <!--  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -317,7 +334,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+            -->
             
             <!-- integration-test -->
             <plugin>
@@ -360,12 +377,14 @@
             <type>ejb</type>
         </dependency>
         
-        <!-- ejb client -->
+        <!-- ejb client -->       
         <dependency>
             <groupId>jboss</groupId>
             <artifactId>jbossall-client</artifactId>
             <version>4.2.2.GA</version>            
-        </dependency>       
+        </dependency>    
+
+            
     </dependencies>
     
 </project>

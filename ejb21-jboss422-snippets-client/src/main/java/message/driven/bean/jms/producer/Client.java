@@ -1,5 +1,7 @@
 package message.driven.bean.jms.producer;
 
+import java.net.InetAddress;
+import java.rmi.dgc.VMID;
 import java.util.Properties;
 
 import javax.jms.Connection;
@@ -27,12 +29,23 @@ public class Client {
         conn.start();
                 
         MessageProducer producer = session.createProducer(queue);
-        for(int m = 0; m < 10; m ++) {
-            TextMessage tm = session.createTextMessage("Hello World"+"#"+m);
+        for(int m = 0; m < 1; m ++) {
+			String hostname = InetAddress.getLocalHost().getHostName();
+			VMID vmid = new VMID();      
+			String text = "sent by MDB client console"
+							+ System.getProperty("line.separator") + "at hostname=" + hostname 
+							+ System.getProperty("line.separator") + "at PID=" + getPID()
+							+ System.getProperty("line.separator") + "at VMID=" + vmid.toString();        	 
+            TextMessage tm = session.createTextMessage(text);
             producer.send(tm);
         }
         producer.close();
         session.close();
         conn.close();
 	}
+	
+	public static long getPID() {
+		String processName = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+		return Long.parseLong(processName.split("@")[0]);
+	}	
 }

@@ -24,8 +24,7 @@ public class ClientIT {
     	/*
     		make sure all messages are all sent by JMS
     		and all consumed by MDB
-    		and all inserted into database by BMP
-    		
+    		and all inserted into database by BMP    		
     	 */    		
     	Thread.sleep(2000);
     	
@@ -41,7 +40,7 @@ public class ClientIT {
 	        Statement stmt = conn.createStatement();        
 	        ResultSet rs = stmt.executeQuery("select count(*) as CNT from HelloWorld");
 	        if (rs.next()) {
-	            assertEquals(10, rs.getInt("CNT"));
+	            assertEquals(1, rs.getInt("CNT"));
 	        }
 		} catch (NamingException e) {
 			e.printStackTrace();
