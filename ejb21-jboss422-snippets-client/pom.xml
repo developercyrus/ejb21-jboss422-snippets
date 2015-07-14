@@ -264,6 +264,8 @@
                     when using "start-and-wait", it will hit "Waiting to retrieve JBoss JMX MBean connection..." 
                     because there's no "ClassNotFoundException org.jboss.jmx.adaptor.rmi.RMIAdaptor"
                     solved by adding jboss-all-client as dependency
+                    
+                    reference: http://stackoverflow.com/questions/6572560/eclipse-web-application-deployment-problem-with-maven-on-jboss                    
                  -->
                 <dependencies>
                     <dependency>
